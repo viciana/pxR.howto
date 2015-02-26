@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Surfeando en los servidores de datos con \(pxR\)</title>
+<meta name="author" content="(Francisco Viciana)"/>
+
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/css/reveal.css"/>
+<link rel="stylesheet" href="http://cdn.jsdelivr.net/reveal.js/2.5.0/css/theme/simple.css" id="theme"/>
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'http://cdn.jsdelivr.net/reveal.js/2.5.0/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<meta name="pxR:  manejar ficheros pc-axis en R" content="ejemplo de uso con INE-Base">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<h1>Surfeando en los servidores de datos con \(pxR\)</h1>
+<h2>Francisco Viciana</h2>
+<h2><a href="mailto:francisco.viciana [+]  g m a i l.com">francisco.viciana [+]  g m a i l.com</a></h2>
+<h2></h2>
+</section>
+<section>
+<h2>Table of Contents</h2><ul>
+<li>
+<a href="#sec-1">Precisando contenido</a>
+</li>
+<li>
+<a href="#sec-2">Ejemplos de uso: pxR en descarga y preparación de  datos</a>
+</li>
+<li>
+<a href="#sec-3">Para terminar</a>
+</li>
+</ul>
+</section>
+
+
+<section id="sec-1" >
+
+<h2><span class="section-number-2">1</span> Precisando contenido</h2>
+</section>
+<section>
+<section id="sec-1-1" >
+
+<h3><span class="section-number-3">1.1</span> De la epoca del Pencil-Data al Big-Data</h3>
+<dl class="org-dl">
+<dt><b>Epoca del Pencil-Data</b></dt><dd>El 99% del esfuerzo del Análisis de datos
+correspondía a la <i>recopilación y grabación</i> de los datos y el 1%
+para el <i>análisis en si</i>
+</dd>
+<dt><b>Epoca del Big-Data</b></dt><dd>El 99% del esfuerzo corresponde a la <i>edición y
+manipulación</i> de los datos hasta construir los <i>dirty data</i>
+analizables y el 1% es para el <i>análisis en si</i>
+</dd>
+</dl>
+
+<aside class="notes">
+<ul class="org-ul">
+<li>Desde los apuntes a lapiz en hojas de papel hasta 
+las tablas que no caben en  memoria 
+</li>
+<li>Paralelamente el avance de la tecnología de la información
+junto con los estándares y formatos de difusión de esta
+ha  evolucionando de manera paralela.
+</li>
+</ul>
+</aside>
+</section>
+
+</section>
+<section>
+<section id="sec-1-2" >
+
+<h3><span class="section-number-3">1.2</span> Y los gigantes Servidores Estadísticos</h3>
+<ul class="org-ul">
+<li><a href="http://ec.europa.eu/eurostat/data/database">BDE de EuroStat</a>
+</li>
+<li><a href="http://www.ine.es/inebmenu/indice.htm">BDE del INE de España: IneBase</a>
+</li>
+<li><a href="http:www.juntadeandalucia.es/institutodeestadisticaycartografia/consultasActividad.jsp?CodOper=660&sub=50517">BDE del IECA: BADEA</a>
+</li>
+</ul>
+</section>
+
+</section>
+<section>
+<section id="sec-1-3" >
+
+<h3><span class="section-number-3">1.3</span> Y los "ladrillos" de la difusión estadística?</h3>
+<ul class="org-ul">
+<li>Publicaciones papel de tablas estadísticas
+</li>
+<li>Reproducciones de las tablas en papel sobre ficheros informáticos:
+pdf, xls..
+</li>
+<li>Ficheros planos de datos con fichero de metadatos auxiliares
+(codebook): FWF, CSV &#x2026;
+</li>
+<li>Ficheros con metadatos incorporados: 
+<ul class="org-ul">
+<li><a href="http://www.hdfgroup.org/">HDF</a>
+</li>
+<li><a href="http://json-stat.org/">JSON-stat</a>
+</li>
+<li><a href="http://www.scb.se/sv_/PC-Axis/Programs/PC-Axis/PC-Axis-2008/">ficheros px de PC-AXIS</a>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+<section id="sec-1-3-1" >
+
+<h4><span class="section-number-4">1.3.1</span> Que son los ficheros \(px\)</h4>
+<ol class="org-ol">
+<li>Los <b>ficheros px</b> son contenedores de <i>cifras estadísticos</i> que se
+organizan en forma de <b>hipercubos</b> multidimensionales que
+almacenan en el mismo fichero de texto plano, los metadados
+(variables, categorías y descripciones) que permiten su
+interpretación. <a href="https://r-forge.r-project.org/scm/viewvc.php/pkg/tests/example3.px?annotate=84&root=pxr">Vease este ejemplo</a>
+</li>
+<li>Sus especificaciones en <a href="http://www.scb.se/Upload/PC-Axis/Support/Documents/PX-file_format_specification_2013.pdf">están documentadas</a> por su creadores:
+<i>Statistics Sweden</i>
+</li>
+
+<li>Muchos servidores de estadísticas usan fundamentalmente este
+formato de ficheros para la difusión de sus estadísticas como
+<a href="http://www.scb.se/en_/">Statistics Sweden</a> o el <a href="http://www.ine.es/">INE de España</a>
+</li>
+</ol>
+
+
+</section>
+<section id="sec-1-3-2" >
+
+<h4><span class="section-number-4">1.3.2</span> Como se manejan los ficheros \(px\)</h4>
+<ul class="org-ul">
+<li>Se maneja con  <b>pc-axis</b>, un software solo disponible en windows,
+gratuito pero no libre. Existen pocas alternativas para manejar estos
+ficheros sin pc-axis, algunos de ellas:
+<ul class="org-ul">
+<li><a href="http://stackoverflow.com/questions/18749484/parse-a-pc-axis-px-file-in-matlab">Un script-matlab</a> para su lectura
+</li>
+<li><a href="https://metacpan.org/pod/Data::PcAxis">Un script-perl</a> para su lectura
+</li>
+<li>Un par de funciones "pcAxisCube" dentro del r-paquete: <a href="http://cran.r-project.org/web/packages/qmrparser/index.html">qmrparser</a>
+</li>
+<li>Un r-paquete: <a href="https://r-forge.r-project.org/R/?group_id=1112">pxR</a> especifico para leer, administrar y escribir este tipo de ficheros
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+<section id="sec-1-3-3" >
+
+<h4><span class="section-number-4">1.3.3</span> Ejemplo mínimo: para entender pxR</h4>
+<ul class="org-ul">
+<li>Problema: manejar el <a href="./casosdeuso/ejemplo.px.html">fichero ejemplo.px</a>
+</li>
+<li><a href="./casosdeuso/01_minimopx.R.html">Leerlo y transformarlo</a> en objetos de R
+</li>
+</ul>
+</section>
+
+</section>
+<section id="sec-2" >
+
+<h2><span class="section-number-2">2</span> Ejemplos de uso: pxR en descarga y preparación de  datos</h2>
+</section>
+<section>
+<section id="sec-2-1" >
+
+<h3><span class="section-number-3">2.1</span> El proceso de captura, edición y preparación de los datos</h3>
+<p>
+<i>Captura y editar datos</i> consume gran parte de
+los recursos de todo proceso de <i>análisis de datos</i>. Podemos
+distinguir dos estrategias extremas para abordar la cuestión 
+</p>
+<dl class="org-dl">
+<dt><b>Estrategia clásica basada en los datos</b></dt><dd>reproduce la metodología
+empleada en la época del <i>Pencil-Data</i>: se va recuperando una a
+una las distinta cifras que se precisan de las diferente fuente
+(paginas web) y con <i>recorta-y-pega</i> se van sucesivamente
+rellenando multiples <i>hojas de calculo</i>. 
+</dd>
+<dt><b>Estrategia basada en los tratamiento</b></dt><dd>Se parte de la catalogación e
+identificación precisa de las <i>fuentes crudas</i> que se precisan
+(idealmente URL). Se definen los procesos (en forma de script)
+que permitirán transformar <i>las fuentes crudas</i> y unos <i>datos
+limpios</i> (<i>dirty data</i>) analizables. 
+</dd>
+</dl>
+</section>
+
+</section>
+<section>
+<section id="sec-2-2" >
+
+<h3><span class="section-number-3">2.2</span> Con una solo enlace: Mortalidad por secciones censales</h3>
+<ul class="org-ul">
+<li><a href="./casosdeuso/02_sca01.R.html">Descargar y preprocesar</a> datos desde fuente única
+</li>
+<li><a href="./casosdeuso/02_sca02.R.html">Ediccion de datos</a> preparación (conjunto limpios de datos/ de
+acuerdo al objetivo
+</li>
+<li><a href="./casosdeuso/02_sca03.R.html">Estimación de indicadores</a> en este caso las Razones de Mortalidad
+Estandarizas por Secciones Censales
+</li>
+<li><a href="./casosdeuso/02_sca04.R.html">Análisis Exploratorio</a>: un <a href="./casosdeuso/SCAnd01.png">gráfico inicial</a>
+</li>
+<li>El <a href="http://www.juntadeandalucia.es/institutodeestadisticaycartografia/longevidad/mapa/index.htm">resultado final</a>
+</li>
+</ul>
+</section>
+</section>
+<section>
+<section id="sec-2-3" >
+
+<h3><span class="section-number-3">2.3</span> Combinando múltiples enlaces:</h3>
+<ul class="org-ul">
+<li>Un ejemplo tomado de <a href="http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t20/e245/&file=inebase">una pagina de INEbase</a>
+</li>
+<li>El <a href="./casosdeuso/03_INE.R.html">script de extracción y proceso</a>
+</li>
+</ul>
+</section>
+
+</section>
+<section id="sec-3" >
+
+<h2><span class="section-number-2">3</span> Para terminar</h2>
+</section>
+<section>
+<section id="sec-3-1" >
+
+<h3><span class="section-number-3">3.1</span> ¿Te estas iniciando en el universo R?</h3>
+<p>
+.. y te interesa un curso presencial introductorio, tienes una oportunidas
+cercana si vives en Sevilla:
+</p>
+<ul class="org-ul">
+<li><a href="http://www.centrodeestudiosandaluces.es/index.php?mod=cea_actividades&IdProg=ACT021/15&id=1079&idm=474&byear=2015&vid=18009">Visualización y análisis de datos con R</a>
+</li>
+</ul>
+</section>
+</section>
+</div>
+</div>
+<p>Realizado por Fran Viciana</p>
+
+<script src="http://cdn.jsdelivr.net/reveal.js/2.5.0/lib/js/head.min.js"></script>
+<script src="http://cdn.jsdelivr.net/reveal.js/2.5.0/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: true,
+rollingLinks: true,
+keyboard: true,
+overview: true,
+width: 1200,
+height: 800,
+margin: 0.05,
+minScale: 0.50,
+maxScale: 2.50,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'cube', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'http://cdn.jsdelivr.net/reveal.js/2.5.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+]
+});
+</script>
+</body>
+</html>

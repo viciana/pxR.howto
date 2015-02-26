@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.47 in css mode. -->
+<html>
+  <head>
+    <title>02_sca03.R</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+
+<span class="comment-delimiter">#  </span><span class="comment">--------------------------------------------------------------
+</span><span class="comment-delimiter">## </span><span class="comment">Calcular la RME de mortalidad de hombres mayores de 65 a&#241;os
+</span><span class="comment-delimiter">#  </span><span class="comment">--------------------------------------------------------------
+</span><span class="comment-delimiter">## </span><span class="comment">Calcula tasas del conjunto de Andaluc&#237;a
+</span><span class="comment-delimiter">##  </span><span class="comment">y luego defunciones esperadas
+</span>apply(ev,2,sum) / apply(pt,2,sum) <span class="constant">-&gt;</span> tat
+sweep(pt,2,tat,<span class="string">"*"</span>)               <span class="constant">-&gt;</span> ee  <span class="comment-delimiter"># </span><span class="comment">Esperadas por edad
+</span>apply(ee,1,sum) <span class="constant">-&gt;</span> esp                   <span class="comment-delimiter"># </span><span class="comment">Esperadas totales
+</span>obs/esp <span class="constant">-&gt;</span>RME                <span class="comment-delimiter"># </span><span class="comment">Raz&#243;n de Mortalidad Estandarizada
+</span>Z <span class="constant">&lt;-</span> 1.96                    <span class="comment-delimiter"># </span><span class="comment">Para un alpha del 0.05
+</span>1/sqrt(obs) <span class="constant">-&gt;</span> EE            <span class="comment-delimiter"># </span><span class="comment">Error Est&#225;ndar
+</span>cbind(RME, RME*exp(-Z*EE), RME*exp(Z*EE)) <span class="constant">-&gt;</span> IC <span class="comment-delimiter"># </span><span class="comment">Intervalo de Confianza
+</span>IC[-1,] <span class="constant">-&gt;</span> IC                <span class="comment-delimiter"># </span><span class="comment">Borra el primer registro (total secciones)
+</span><span class="comment-delimiter"># </span><span class="comment">Organiza y etiqueta objeto resultante:
+</span>as.data.frame(IC)<span class="constant">-&gt;</span> IC ; str(IC)
+names(IC) <span class="constant">&lt;-</span> c(<span class="string">'RME'</span>,<span class="string">'LIC'</span>,<span class="string">'UIC'</span>)
+IC$GRUPO  <span class="constant">&lt;-</span> with(IC, ifelse(UIC&lt;1,1, ifelse(LIC&gt;1,5,3) ) )
+
+<span class="comment-delimiter">## </span><span class="comment">----------------------------------------------------------------+
+</span><span class="comment-delimiter">## </span><span class="comment">Asigna los grupos de clasificaci&#243;n en niveles de mortalidad
+</span><span class="comment-delimiter">## </span><span class="comment">----------------------------------------------------------------+
+</span>median(IC$RME[IC$GRUPO==1],na.rm=T) <span class="constant">-&gt;</span> mi
+<span class="comment-delimiter"># </span><span class="comment">Mediana grupo inferior
+</span>median(IC$RME[IC$GRUPO==5],na.rm=T) <span class="constant">-&gt;</span> ms
+<span class="comment-delimiter"># </span><span class="comment">Mediana grupo superior
+</span>IC$GRUPO[IC$GRUPO==1 &amp; IC$RME &gt; mi] <span class="constant">&lt;-</span> 2
+<span class="comment-delimiter"># </span><span class="comment">Moderadamente BAJA
+</span>IC$GRUPO[IC$GRUPO==5 &amp; IC$RME &lt; ms] <span class="constant">&lt;-</span> 4
+<span class="comment-delimiter"># </span><span class="comment">Moderadamente ALTA
+</span>table(IC$GRUPO)
+<span class="comment-delimiter">#   </span><span class="comment">1   2    3   4   5
+</span><span class="comment-delimiter"># </span><span class="comment">742 741 2151 873 874 
+</span><span class="comment-delimiter"># </span><span class="comment">N&#250;mero de secciones en cada categor&#237;a:
+</span>
+head(IC)
+<span class="comment-delimiter">#                 </span><span class="comment">RME       LIC       UIC GRUPO
+</span><span class="comment-delimiter"># </span><span class="comment">400101001 0.7799494 0.7166373 0.8488548     1
+</span><span class="comment-delimiter"># </span><span class="comment">400201001 0.7541833 0.6891226 0.8253865     1
+</span><span class="comment-delimiter"># </span><span class="comment">400301001 0.9382779 0.8489712 1.0369790     3
+</span><span class="comment-delimiter"># </span><span class="comment">400301002 0.8350746 0.7022433 0.9930313     1
+</span><span class="comment-delimiter"># </span><span class="comment">400301003 1.1650020 1.0541155 1.2875532     5
+</span><span class="comment-delimiter"># </span><span class="comment">400301004 1.0876468 0.9541432 1.2398303     3
+</span>
+</pre>
+  </body>
+</html>

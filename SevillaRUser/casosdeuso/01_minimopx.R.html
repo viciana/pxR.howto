@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.47 in css mode. -->
+<html>
+  <head>
+    <title>01_minimopx.R</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter"># </span><span class="comment">install.packages("pxR", repos="http://R-Forge.R-project.org")
+</span><span class="constant">require</span>(pxR)
+
+  ejemplo <span class="constant">&lt;-</span> read.px     (<span class="string">'ejemplo.px'</span>)                  <span class="comment-delimiter"># </span><span class="comment">Lee px-file
+</span>d.ejemplo <span class="constant">&lt;-</span> as.data.frame (ejemplo, direction = <span class="string">'wide'</span>) <span class="comment-delimiter"># </span><span class="comment">To array
+</span>a.ejemplo <span class="constant">&lt;-</span> as.array      (ejemplo)                     <span class="comment-delimiter"># </span><span class="comment">To data.frame
+</span>
+d.ejemplo
+<span class="comment-delimiter">#   </span><span class="comment">SEXO EDAD Alto.100 Bajo.000 Medio.25 Medio.50
+</span><span class="comment-delimiter"># </span><span class="comment">1    H   B1        1        2        3        4
+</span><span class="comment-delimiter"># </span><span class="comment">2    H   B2        5        6        7        8
+</span><span class="comment-delimiter"># </span><span class="comment">3    H   B3        9       10       11       12
+</span><span class="comment-delimiter"># </span><span class="comment">4    M   B1       13       14       15       16
+</span><span class="comment-delimiter"># </span><span class="comment">5    M   B2       17       18       19       20
+</span><span class="comment-delimiter"># </span><span class="comment">6    M   B3       21       22       23       24
+</span>
+a.ejemplo
+<span class="comment-delimiter">#     </span><span class="comment">, , SEXO = H
+</span><span class="comment-delimiter">#         </span><span class="comment">EDAD
+</span><span class="comment-delimiter"># </span><span class="comment">ZONA     B1 B2 B3
+</span><span class="comment-delimiter"># </span><span class="comment">Alto.100  1  5  9
+</span><span class="comment-delimiter"># </span><span class="comment">Bajo.000  2  6 10
+</span><span class="comment-delimiter"># </span><span class="comment">Medio.25  3  7 11
+</span><span class="comment-delimiter"># </span><span class="comment">Medio.50  4  8 12
+</span><span class="comment-delimiter"># </span><span class="comment">
+</span><span class="comment-delimiter">#     </span><span class="comment">, , SEXO = M
+</span><span class="comment-delimiter">#            </span><span class="comment">EDAD
+</span><span class="comment-delimiter"># </span><span class="comment">ZONA     B1 B2 B3
+</span><span class="comment-delimiter"># </span><span class="comment">Alto.100 13 17 21
+</span><span class="comment-delimiter"># </span><span class="comment">Bajo.000 14 18 22
+</span><span class="comment-delimiter"># </span><span class="comment">Medio.25 15 19 23
+</span><span class="comment-delimiter"># </span><span class="comment">Medio.50 16 20 24
+</span></pre>
+  </body>
+</html>

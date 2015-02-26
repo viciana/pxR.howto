@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.47 in css mode. -->
+<html>
+  <head>
+    <title>03_INE.R</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #a020f0;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #228b22;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+install.packages(<span class="string">"pxR"</span>, repos=<span class="string">"http://R-Forge.R-project.org"</span>)  
+<span class="constant">require</span>(pxR)
+
+<span class="comment-delimiter"># </span><span class="comment">Poblaci&#243;n por sexo, municipios y edad (grupos quinquenales). 
+</span>lugares  <span class="constant">&lt;-</span> 
+c(<span class="string">'http://www.ine.es/pcaxisdl//t20/e245/p05/a2014/l0/00004001.px'</span>,
+  <span class="string">'http://www.ine.es/pcaxisdl//t20/e245/p05/a2013/l0/00004001.px'</span>,
+  <span class="string">'http://www.ine.es/pcaxisdl//t20/e245/p05/a2012/l0/00004001.px'</span>,
+  <span class="string">'http://www.ine.es/pcaxisdl//t20/e245/p05/a2011/l0/00004001.px'</span>
+)
+names(lugares) <span class="constant">&lt;-</span> c(2014:2011)
+
+<span class="comment-delimiter">## </span><span class="comment">descargando en una lista
+</span>lista.datos = list()
+c <span class="constant">&lt;-</span> 0
+<span class="keyword">for</span>(i <span class="keyword">in</span> lugares) {
+  c <span class="constant">&lt;-</span> c+1
+  print(a&#241;o <span class="constant">&lt;-</span> as.integer(names(lugares[c])))
+  print(i)
+  dato <span class="constant">&lt;-</span> as.data.frame(read.px(i))
+  dato$a&#241;o <span class="constant">&lt;-</span> a&#241;o
+  sum(dato$municipio==<span class="string">'Total'</span>)
+  lista.datos <span class="constant">&lt;-</span> c(lista.datos,list(dato))
+}
+
+
+<span class="comment-delimiter"># </span><span class="comment">comprobando si estructuras encajan:
+</span>str(lista.datos)
+<span class="comment-delimiter"># </span><span class="comment">List of 4
+</span><span class="comment-delimiter"># </span><span class="comment">$ :'data.frame':  6798 obs. of  5 variables:
+</span><span class="comment-delimiter"># </span><span class="comment">..$ edad..grupos.quinquenales.: Factor w/ 22 levels "Total","0-4",..: 1 2 3 4 5 6 7 8 9 10 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ municipios                : Factor w/ 103 levels "Total","04001-Abla",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ sexo                      : Factor w/ 3 levels "Ambos sexos",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ value                     : num [1:6798] 701688 40631 42228 37465 36787 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ a&#241;o                       : int [1:6798] 2014 2014 2014 2014 2014 2014 2014 2014 2014 2014 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ :'data.frame':      6798 obs. of  5 variables:
+</span><span class="comment-delimiter"># </span><span class="comment">..$ edad..grupos.quinquenales.: Factor w/ 22 levels "Total","0-4",..: 1 2 3 4 5 6 7 8 9 10 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ municipios                : Factor w/ 103 levels "Total","04001-Abla",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ sexo                      : Factor w/ 3 levels "Ambos sexos",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ value                     : num [1:6798] 699329 41471 40617 37060 37097 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ a&#241;o                       : int [1:6798] 2013 2013 2013 2013 2013 2013 2013 2013 2013 2013 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ :'data.frame':      6798 obs. of  5 variables:
+</span><span class="comment-delimiter"># </span><span class="comment">..$ edad..grupos.quinquenales.: Factor w/ 22 levels "Total","0-4",..: 1 2 3 4 5 6 7 8 9 10 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ municipios                : Factor w/ 103 levels "Total","04001-Abla",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ sexo                      : Factor w/ 3 levels "Ambos sexos",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ value                     : num [1:6798] 704219 41693 39895 37340 38313 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ a&#241;o                       : int [1:6798] 2012 2012 2012 2012 2012 2012 2012 2012 2012 2012 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ :'data.frame':      6798 obs. of  5 variables:
+</span><span class="comment-delimiter"># </span><span class="comment">..$ edad..grupos.quinquenales.: Factor w/ 22 levels "Total","0-4",..: 1 2 3 4 5 6 7 8 9 10 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ municipios                : Factor w/ 103 levels "Total","04001-Abla",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ sexo                      : Factor w/ 3 levels "Ambos sexos",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ value                     : num [1:6798] 702819 42122 38712 36805 38955 ...
+</span><span class="comment-delimiter"># </span><span class="comment">..$ a&#241;o                       : int [1:6798] 2011 2011 2011 2011 2011 2011 2011 2011 2011 2011 ...
+</span>
+
+<span class="comment-delimiter">## </span><span class="comment">Agregando en un solo objeto
+</span>
+serie <span class="constant">&lt;-</span> subset(dato,<span class="type">FALSE</span>)  <span class="comment-delimiter"># </span><span class="comment">preparo contenedor
+</span><span class="keyword">for</span> (i <span class="keyword">in</span> lista.datos) {
+    serie <span class="constant">&lt;-</span> rbind(serie,i)
+}
+
+str(serie)
+<span class="comment-delimiter"># </span><span class="comment">'data.frame':  27192 obs. of  5 variables:
+</span><span class="comment-delimiter"># </span><span class="comment">$ edad..grupos.quinquenales.: Factor w/ 22 levels "Total","0-4",..: 1 2 3 4 5 6 7 8 9 10 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ municipios                : Factor w/ 103 levels "Total","04001-Abla",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ sexo                      : Factor w/ 3 levels "Ambos sexos",..: 1 1 1 1 1 1 1 1 1 1 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ value                     : num  701688 40631 42228 37465 36787 ...
+</span><span class="comment-delimiter"># </span><span class="comment">$ a&#241;o                       : int  2014 2014 2014 2014 2014 2014 2014 2014 2014 2014 ...
+</span>
+
+
+</pre>
+  </body>
+</html>

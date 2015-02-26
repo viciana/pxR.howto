@@ -1,0 +1,117 @@
+#+TITLE: Surfeando en los servidores de datos con $pxR$     
+
+#+SETUPFILE: myRevealConfig.org
+#+PROPERTY: exports both 
+#+PROPERTY: results output graphics
+#+PROPERTY: eval yes
+
+
+#+REVEAL_HEAD_PREAMBLE: <meta name="pxR:  manejar ficheros pc-axis en R" content="ejemplo de uso con INE-Base">
+#+REVEAL_POSTAMBLE: <p>Realizado por Fran Viciana</p>
+
+# #+REVEAL_TITLE_SLIDE_BACKGROUND: ./img/surf-f.jpg 
+# #+REVEAL_TITLE_SLIDE_BACKGROUND_SIZE: 900px.
+# #+REVEAL_TITLE_SLIDE_BACKGROUND_REPEAT: nil
+# comentarios
+
+
+* Precisando contenido
+** De la epoca del Pencil-Data al Big-Data 
+  - Epoca del Pencil-Data :: El 99% del esfuerzo del Análisis de datos
+       correspondía a la /recopilación y grabación/ de los datos y el 1%
+       para el /análisis en si/
+  - Epoca del Big-Data :: El 99% del esfuerzo corresponde a la /edición y
+       manipulación/ de los datos hasta construir los /dirty data/
+       analizables y el 1% es para el /análisis en si/
+
+#+BEGIN_NOTES
+  * Desde los apuntes a lapiz en hojas de papel hasta 
+    las tablas que no caben en  memoria 
+  * Paralelamente el avance de la tecnología de la información
+    junto con los estándares y formatos de difusión de esta
+    ha  evolucionando de manera paralela.
+#+END_NOTES
+
+** Y los gigantes Servidores Estadísticos
+  - [[http://ec.europa.eu/eurostat/data/database][BDE de EuroStat]]
+  - [[http://www.ine.es/inebmenu/indice.htm][BDE del INE de España: IneBase]]
+  - [[http:www.juntadeandalucia.es/institutodeestadisticaycartografia/consultasActividad.jsp?CodOper=660&sub=50517][BDE del IECA: BADEA]]
+
+** Y los "ladrillos" de la difusión estadística? 
+ - Publicaciones papel de tablas estadísticas
+ - Reproducciones de las tablas en papel sobre ficheros informáticos:
+   pdf, xls..
+ - Ficheros planos de datos con fichero de metadatos auxiliares
+   (codebook): FWF, CSV ...
+ - Ficheros con metadatos incorporados: 
+   + [[http://www.hdfgroup.org/][HDF]]
+   + [[http://json-stat.org/][JSON-stat]]
+   + [[http://www.scb.se/sv_/PC-Axis/Programs/PC-Axis/PC-Axis-2008/][ficheros px de PC-AXIS]]
+
+*** Que son los ficheros $px$ 
+
+ 1) Los *ficheros px* son contenedores de /cifras estadísticos/ que se
+    organizan en forma de *hipercubos* multidimensionales que
+    almacenan en el mismo fichero de texto plano, los metadados
+    (variables, categorías y descripciones) que permiten su
+    interpretación. [[https://r-forge.r-project.org/scm/viewvc.php/pkg/tests/example3.px?annotate=84&root=pxr][Vease este ejemplo]]
+ 2) Sus especificaciones en [[http://www.scb.se/Upload/PC-Axis/Support/Documents/PX-file_format_specification_2013.pdf][están documentadas]] por su creadores:
+    /Statistics Sweden/
+
+ 3) Muchos servidores de estadísticas usan fundamentalmente este
+    formato de ficheros para la difusión de sus estadísticas como
+    [[http://www.scb.se/en_/][Statistics Sweden]] o el [[http://www.ine.es/][INE de España]]
+
+
+*** Como se manejan los ficheros $px$ 
+
+ * Se maneja con  *pc-axis*, un software solo disponible en windows,
+    gratuito pero no libre. Existen pocas alternativas para manejar estos
+    ficheros sin pc-axis, algunos de ellas:
+    - [[http://stackoverflow.com/questions/18749484/parse-a-pc-axis-px-file-in-matlab][Un script-matlab]] para su lectura
+    - [[https://metacpan.org/pod/Data::PcAxis][Un script-perl]] para su lectura
+    - Un par de funciones "pcAxisCube" dentro del r-paquete: [[http://cran.r-project.org/web/packages/qmrparser/index.html][qmrparser]]
+    - Un r-paquete: [[https://r-forge.r-project.org/R/?group_id=1112][pxR]] especifico para leer, administrar y escribir este tipo de ficheros
+
+*** Ejemplo mínimo: para entender pxR
+   - Problema: manejar el [[./casosdeuso/ejemplo.px.html][fichero ejemplo.px]]
+   - [[./casosdeuso/01_minimopx.R.html][Leerlo y transformarlo]] en objetos de R
+
+* Ejemplos de uso: pxR en descarga y preparación de  datos
+** El proceso de captura, edición y preparación de los datos
+  /Captura y editar datos/ consume gran parte de
+  los recursos de todo proceso de /análisis de datos/. Podemos
+  distinguir dos estrategias extremas para abordar la cuestión 
+- Estrategia clásica basada en los datos :: reproduce la metodología
+     empleada en la época del /Pencil-Data/: se va recuperando una a
+     una las distinta cifras que se precisan de las diferente fuente
+     (paginas web) y con /recorta-y-pega/ se van sucesivamente
+     rellenando multiples /hojas de calculo/. 
+- Estrategia basada en los tratamiento :: Se parte de la catalogación e
+     identificación precisa de las /fuentes crudas/ que se precisan
+     (idealmente URL). Se definen los procesos (en forma de script)
+     que permitirán transformar /las fuentes crudas/ y unos /datos
+     limpios/ (/dirty data/) analizables. 
+
+** Con una solo enlace: Mortalidad por secciones censales
+  - [[./casosdeuso/02_sca01.R.html][Descargar y preprocesar]] datos desde fuente única
+  - [[./casosdeuso/02_sca02.R.html][Ediccion de datos]] preparación (conjunto limpios de datos/ de
+    acuerdo al objetivo
+  - [[./casosdeuso/02_sca03.R.html][Estimación de indicadores]] en este caso las Razones de Mortalidad
+    Estandarizas por Secciones Censales
+  - [[./casosdeuso/02_sca04.R.html][Análisis Exploratorio]]: un [[./casosdeuso/SCAnd01.png][gráfico inicial]]
+  - El [[http://www.juntadeandalucia.es/institutodeestadisticaycartografia/longevidad/mapa/index.htm][resultado final]]
+** Combinando múltiples enlaces: 
+  - Un ejemplo tomado de [[http://www.ine.es/jaxi/menu.do?type=pcaxis&path=/t20/e245/&file=inebase][una pagina de INEbase]]
+  - El [[./casosdeuso/03_INE.R.html][script de extracción y proceso]]
+
+* Para terminar
+** ¿Te estas iniciando en el universo R?
+.. y te interesa un curso presencial introductorio, tienes una oportunidas
+cercana si vives en Sevilla:
+-  [[http://www.centrodeestudiosandaluces.es/index.php?mod=cea_actividades&IdProg=ACT021/15&id=1079&idm=474&byear=2015&vid=18009][Visualización y análisis de datos con R]]
+
+
+
+
+

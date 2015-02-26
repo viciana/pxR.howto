@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.47 in css mode. -->
+<html>
+  <head>
+    <title>02_sca02.R</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">## </span><span class="comment">------------------------------------------------------------
+</span><span class="comment-delimiter">## </span><span class="comment">Editar los datos:  Seleccionar, filtrar y agregar     
+</span><span class="comment-delimiter">## </span><span class="comment">------------------------------------------------------------
+</span><span class="comment-delimiter">## </span><span class="comment">Importamos eventos ("ev") y personas-a&#241;o ("pt")
+</span><span class="comment-delimiter">## </span><span class="comment">y luego agregamos por edad y secci&#243;n censal (suprimimos variables)
+</span>
+<span class="comment-delimiter">## </span><span class="comment">EVENTOS: 
+</span>as.array(read.px(<span class="string">'consulta226/th05h_e.px'</span>))  <span class="constant">-&gt;</span> ev
+names(dimnames(ev))
+<span class="comment-delimiter"># </span><span class="comment">[1] "PMDS" "Grupo.edad" "Nivel.educativo.7" 
+</span><span class="comment-delimiter"># </span><span class="comment">[4] "Espa&#241;ol"  "Propiedad.vivienda"
+</span>length(ev[])
+<span class="comment-delimiter"># </span><span class="comment">8525088
+</span>apply(ev,1:2,sum)                            <span class="constant">-&gt;</span> ev
+names(dimnames(ev))
+<span class="comment-delimiter"># </span><span class="comment">[1] "PMDS" "Grupo.edad" 
+</span>length(ev[])
+<span class="comment-delimiter"># </span><span class="comment">118404
+</span>
+<span class="comment-delimiter"># </span><span class="comment">PERSONAS-TIEMPO
+</span>as.array(read.px(<span class="string">'consulta226/th05h_pt.px'</span>)) <span class="constant">-&gt;</span> pt
+apply(pt,1:2,sum)                            <span class="constant">-&gt;</span> pt
+
+
+<span class="comment-delimiter">## </span><span class="comment">Filtramos ambos para mayores de 65 a&#241;os
+</span>ev[,15:22]                                   <span class="constant">-&gt;</span> ev
+pt[,15:22]                                   <span class="constant">-&gt;</span> pt
+
+<span class="comment-delimiter">## </span><span class="comment">Calcula eventos totales por secci&#243;n
+</span>apply(ev,1,sum)<span class="constant">-&gt;</span> obs
+</pre>
+  </body>
+</html>

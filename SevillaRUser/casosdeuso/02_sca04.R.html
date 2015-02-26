@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.47 in css mode. -->
+<html>
+  <head>
+    <title>02_sca04.R</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">## </span><span class="comment">------------------------------------------
+</span><span class="comment-delimiter">### </span><span class="comment">Grafica:
+</span><span class="comment-delimiter">## </span><span class="comment">-----------------------------------------
+</span><span class="comment-delimiter">## </span><span class="comment">Establece ORDEN: GRUPO + RME
+</span><span class="comment-delimiter">## </span><span class="comment">Borra los RME=0 produce un IC infinito no graficable
+</span>IC <span class="constant">&lt;-</span> subset(IC,IC$RME&gt;0)
+<span class="comment-delimiter"># </span><span class="comment">Reordena data.frame y crea variable de rango
+</span>IC[order(IC$RME), ] <span class="constant">-&gt;</span> IC
+<span class="comment-delimiter"># </span><span class="comment">ordena por nivel de RME
+</span>IC[order(IC$GRUPO),] <span class="constant">-&gt;</span> IC
+<span class="comment-delimiter"># </span><span class="comment">ordena por GRUPO Alta, Baja ...
+</span>1:length(IC$RME) <span class="constant">-&gt;</span> IC$ORDEN
+<span class="comment-delimiter"># </span><span class="comment">Posici&#243;n de la secci&#243;n
+</span><span class="comment-delimiter">## </span><span class="comment">Etiquetas de los grupos
+</span>etq <span class="constant">&lt;-</span> c( <span class="string">'Baja'</span> , <span class="string">'Moderadamente baja'</span>,<span class="string">'Diferencia no significativa'</span>,
+          <span class="string">'Moderadamente alta'</span>,<span class="string">'Alta'</span>)
+
+<span class="comment-delimiter">## </span><span class="comment">Reordena, para mejor visualizaci&#243;n
+</span>IC$GRUPO <span class="constant">&lt;-</span> factor(IC$GRUPO,labels = etq )
+IC$GRUPO <span class="constant">&lt;-</span> factor(IC$GRUPO,levels = rev(etq) )
+<span class="comment-delimiter">## </span><span class="comment">Colores y escalas:
+</span>mycol <span class="constant">&lt;-</span> c(<span class="string">'#d7191c'</span>,<span class="string">'#fdae61'</span>,<span class="string">'#ffffbf'</span>,<span class="string">'#a6d96a'</span>,<span class="string">'#1a9641'</span>)
+tips  <span class="constant">&lt;-</span>  c(0.25,0.5,1,2,4)
+
+<span class="constant">require</span>(ggplot2)
+
+<span class="comment-delimiter"># </span><span class="comment">png(file='SCAnd01.png',width = 900, height = 700)
+</span>ggplot(IC, aes(x=ORDEN, y=RME, colour=GRUPO)) +
+  geom_errorbar(aes(ymin=LIC, ymax=UIC), width=0) +
+  geom_point(size=.5,colour= <span class="string">'gray'</span>) +
+  theme_bw() +
+  scale_colour_manual(values = mycol) +
+  labs(list(x = <span class="string">"5381 secciones censales de Andaluc&#237;a"</span>,
+            y = <span class="string">"RME con Intervalos de Confianza al 95%"</span>)) +
+  theme(legend.position = c(0.2, 0.8))  +
+  geom_hline(yintercept=1,color=<span class="string">'blue'</span>) +
+  scale_y_log10(breaks=tips,labels=tips) +
+  theme(legend.background = element_rect(fill=<span class="string">"gray90"</span>, size=.5 )) 
+<span class="comment-delimiter"># </span><span class="comment">dev.off()
+</span></pre>
+  </body>
+</html>
